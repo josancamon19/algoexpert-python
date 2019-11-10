@@ -212,7 +212,7 @@ class DoublyLinkedList:
 #
 #         current = self.head
 #         while current.next:
-#             if current.next == node:  # TODO check if use .value or not
+#             if current.next == node:
 #                 nodeToInsert.prev = current
 #                 nodeToInsert.next = current.next
 #
@@ -225,7 +225,7 @@ class DoublyLinkedList:
 #         # Write your code here.
 #         current = self.head
 #         while current.next:
-#             if current.next == node:  # TODO check if use .value or not
+#             if current.next == node:
 #                 nodeToInsert.prev = current.next
 #                 nodeToInsert.next = current.next.next
 #

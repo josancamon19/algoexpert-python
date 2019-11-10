@@ -92,3 +92,7 @@ class BST:
                     break
 
         return self
+
+
+if __name__ == '__main__':
+    pass
