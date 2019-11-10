@@ -10,7 +10,7 @@ class Node:
     def breadthFirstSearch(self, array):
         queue = [self]
         while len(queue) > 0:
-            node = queue.pop(0)
+            node = queue.pop(-1)
             array.append(node.name)
             for child in node.children:
                 queue.insert(0, child)
