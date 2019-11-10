@@ -1,10 +1,25 @@
-def compare(node_value, target):
-    if node_value > target:
-        return -1
-    elif node_value < target:
-        return 1
-    else:
-        return 0
+def traverse_list(node):
+    visit_order = list()
+    if node:
+        visit_order.append(node.value)
+        visit_order += traverse_list(node.left)
+        visit_order += traverse_list(node.right)
+    return visit_order
+
+
+def traverse(node):
+    visit_order = list()
+    if node:
+        visit_order.append(node)
+        visit_order += traverse(node.left)
+        visit_order += traverse(node.right)
+    return visit_order
+
+
+def get_min_node_value(node):
+    while node.left:
+        node = node.left
+    return node.value
 
 
 class BST:
@@ -13,86 +28,102 @@ class BST:
         self.left = None
         self.right = None
 
-    def traverse(self, node):
-        visit_order = list()
-        if node:
-            visit_order.append(node.value)
-            visit_order += self.traverse(node.left)
-            visit_order += self.traverse(node.right)
-        return visit_order
+    def compare(self, target):
+        if self.value > target:
+            return -1
+        elif self.value < target:
+            return 1
+        else:
+            return 0
 
     def insert(self, value):
 
-        new_node = BST(value)
-        node = BST(self.value)
+        node = self
         while True:
-            comparision = compare(node.value, value)
+            comparision = node.compare(value)
             if comparision == -1:
-                if self.left:
-                    node = self.left
+                if node.left:
+                    node = node.left
                 else:
-                    self.left = new_node
+                    node.left = BST(value)
                     break
-            elif comparision == 1:
-                if self.right:
-                    node = self.right
+            else:  # comparision == 1 or equals
+                if node.right:
+                    node = node.right
                 else:
-                    self.right = new_node
+                    node.right = BST(value)
                     break
-            else:
-                self.value = value
-                break
 
         return self
 
     def contains(self, value):
-        node = BST(self.value)
-        while True:
-            comparision = compare(node.value, value)
+        node = self
+        while node:
+            comparision = node.compare(value)
             if comparision == -1:
-                if self.left:
-                    node = self.left
-                else:
-                    break
+                node = node.left
             elif comparision == 1:
-                if self.right:
-                    node = self.right
-                else:
-                    break
+                node = node.right
             else:
-                return node
+                return True
 
-        return None
+        return False
 
-    def remove(self, value):
-        node = BST(self.value)
+    def remove(self, value, parent_node=None):
+        node = self
         while True:
-            comparision = compare(node.value, value)
+            comparision = node.compare(value)
             if comparision == -1:
-                if self.left:
-                    node = self.left
-                else:
-                    print('Value not found')
-                    break
-            elif comparision == 1:
-                if self.right:
-                    node = self.right
-                else:
-                    print('Value not found')
-                    break
-            else:
                 if node.left:
-                    new_node = max(self.traverse(node.left))
-                    pass
-                elif node.right:
-                    new_node = min(self.traverse(node.right))
-                    # swap nodes
+                    parent_node = node
+                    node = node.left
                 else:
-                    del node
+                    print('Value not found')
                     break
+            elif comparision == 1:
+                if node.right:
+                    parent_node = node
+                    node = node.right
+                else:
+                    print('Value not found')
+                    break
+            else:
+                if node.left and node.right:  # node with left and child
+                    node.value = get_min_node_value(node.right)
+                    node.right.remove(node.value, node)
+                elif parent_node is None:  # parent node
+                    if node.left:
+                        node.value = node.left.value
+                        node.right = node.left.right
+                        node.left = node.left.left
+                    elif node.right:
+                        node.value = node.right.value
+                        node.left = node.right.left
+                        node.right = node.right.right
+                    else:  # parent node with no children
+                        node.value = None
+
+                elif parent_node.left == node:  # found in the left node with right None
+                    parent_node.left = node.left if node.left else node.right
+                elif parent_node.right == node:  # found in the right node with left None
+                    parent_node.right = node.left if node.left else node.right
+                break
 
         return self
 
 
 if __name__ == '__main__':
-    pass
+    # tree = BST(10)
+    # tree.insert(5)
+    # tree.insert(8)
+    # tree.insert(3)
+    # tree.insert(4)
+    # tree.insert(1)
+    # tree.insert(2)
+    # tree.insert(0)
+    # print(traverse_list(tree))
+    #
+    # tree.remove(5)
+    # print(traverse_list(tree))
+    test = BST(10).insert(5).insert(7).insert(2).remove(10)
+    print(traverse_list(test))
