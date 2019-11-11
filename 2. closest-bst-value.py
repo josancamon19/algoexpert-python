@@ -1,15 +1,19 @@
-# def findClosestValueInBst(tree, target):
-#     # Write your code here.
-#     parent_node = None
-#     node = tree
-#     while node:
-#         if node.value > target:
-#             if node.left:
-#                 node = node.left
-#             else:
-#                 node = node.right
-#         elif node.value < target:
-#             if node.right:
-#                 node = node.right
-#             else:
-#                 return node.value
+def findClosestValueInBst(tree, target):
+    closest_value = float('inf')
+    node = tree
+    while node:
+        if abs(target - closest_value) > abs(target - node.value):
+            closest_value = node.value
+
+        if node.value > target:
+            if node.left is None:
+                return closest_value
+            node = node.left
+
+        elif node.value < target:
+            if node.right is None:
+                return closest_value
+            node = node.right
+
+        else:
+            return node.value
