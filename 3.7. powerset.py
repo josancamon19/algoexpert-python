@@ -1,0 +1,2 @@
+def powerset(array):
+    pass
