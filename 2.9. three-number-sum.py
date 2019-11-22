@@ -2,16 +2,26 @@ from collections import Counter
 
 
 def threeNumberSum(array, targetSum):
-    items = dict(Counter(array))
-    for item1, counter1 in items.items():
-        if counter1 > 0:
-            for item2, counter2 in items.items():
-                item3_expected = targetSum - item1 - item2
-                if (item1 == item2 or item1 == item3_expected or item2 == item3_expected) and counter2 < 2:
-                    continue
-                if item3_expected in items:
-                    print(item1, item2, item3_expected)
+    array.sort()  # nlogn
+    results = []
+    for current in range(len(array)):
+        left = current + 1
+        right = len(array) - 1
+        while left < right:
+            result = array[current] + array[left] + array[right]
+            if result == targetSum:
+                results.append([array[current], array[left], array[right]])
+                left += 1
+                right -= 1
+            elif result < targetSum:
+                left += 1
+            else:
+                right -= 1
+    return results
 
 
 if __name__ == '__main__':
-    threeNumberSum([12, 3, 1, 2, -6, 5, -8, 6], 0)
+    print(threeNumberSum([12, 3, 1, 2, -6, 5, -8, 6], 0))
+    print(threeNumberSum([1, 2, 3, 4, 5, 6, 7, 8, 9, 15], 33))
+    print(threeNumberSum([1], 10))
+    print(threeNumberSum([1, 2, 3, 7, 0], 10))
