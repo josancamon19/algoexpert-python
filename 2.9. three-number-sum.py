@@ -1,6 +1,3 @@
-from collections import Counter
-
-
 def threeNumberSum(array, targetSum):
     array.sort()  # nlogn
     results = []
